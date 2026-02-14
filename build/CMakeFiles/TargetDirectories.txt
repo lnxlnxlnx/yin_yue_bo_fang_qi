@@ -1,0 +1,8 @@
+/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/build/CMakeFiles/ycx_mp4.dir
+/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/build/CMakeFiles/uninstall.dir
+/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/build/CMakeFiles/edit_cache.dir
+/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/build/CMakeFiles/rebuild_cache.dir
+/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/build/CMakeFiles/list_install_components.dir
+/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/build/CMakeFiles/install.dir
+/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/build/CMakeFiles/install/local.dir
+/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/build/CMakeFiles/install/strip.dir

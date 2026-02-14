@@ -1,0 +1,1 @@
+/usr/bin/gcc -g CMakeFiles/ycx_mp4.dir/main.c.o CMakeFiles/ycx_mp4.dir/do.c.o CMakeFiles/ycx_mp4.dir/show.c.o -o ycx_mp4 

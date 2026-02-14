@@ -3,6 +3,11 @@
 
 #include "public.h"
 
+#define MEDIA_DIR     "/home/lnx/Music"  // 媒体文件目录（替换为自己的路径）
+#define FIFO_FILE     "./fifo_mp3"             // 管道文件（可改绝对路径，如"/tmp/fifo_mp3"）
+#define LOG_FILE      "./log_video.log"        // 日志文件（可改绝对路径，如"/var/log/mp3_player.log"）
+
+
 extern int GetChoose(void);//接收选项
 extern void Start_Pause(void);//开始、暂停
 extern void StopOff(void); // 停止

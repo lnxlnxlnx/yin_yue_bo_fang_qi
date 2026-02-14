@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/build",
+  "command": "/usr/bin/gcc  -I/home/lnx/program_study/little_project/yin_yue_bo_fang_qi -g -std=gnu99 -o CMakeFiles/ycx_mp4.dir/main.c.o -c /home/lnx/program_study/little_project/yin_yue_bo_fang_qi/main.c",
+  "file": "/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/main.c",
+  "output": "CMakeFiles/ycx_mp4.dir/main.c.o"
+},
+{
+  "directory": "/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/build",
+  "command": "/usr/bin/gcc  -I/home/lnx/program_study/little_project/yin_yue_bo_fang_qi -g -std=gnu99 -o CMakeFiles/ycx_mp4.dir/do.c.o -c /home/lnx/program_study/little_project/yin_yue_bo_fang_qi/do.c",
+  "file": "/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/do.c",
+  "output": "CMakeFiles/ycx_mp4.dir/do.c.o"
+},
+{
+  "directory": "/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/build",
+  "command": "/usr/bin/gcc  -I/home/lnx/program_study/little_project/yin_yue_bo_fang_qi -g -std=gnu99 -o CMakeFiles/ycx_mp4.dir/show.c.o -c /home/lnx/program_study/little_project/yin_yue_bo_fang_qi/show.c",
+  "file": "/home/lnx/program_study/little_project/yin_yue_bo_fang_qi/show.c",
+  "output": "CMakeFiles/ycx_mp4.dir/show.c.o"
+}
+]

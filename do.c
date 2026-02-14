@@ -1,5 +1,8 @@
 #include "do.h"
 #include "show.h"
+#include <sys/stat.h>  // mkfifo 必需
+#include <errno.h>     // errno 必需
+#include <stdlib.h>    // exit 已包含，无需重复加
 
 void DayBook(char* CmdSentence)
 {
@@ -9,7 +12,7 @@ void DayBook(char* CmdSentence)
     pt = localtime(&t);
 
     FILE* fp = NULL;
-    fp = fopen("./log_video.log", "a+");
+    fp = fopen(LOG_FILE, "a+");
     fprintf(fp, "   \33[36m\33[1m[%04d-%02d-%02d %02d:%02d:%02d]    执行：    \33[0m", pt->tm_year + 1900, pt->tm_mon + 1, pt->tm_mday,
         pt->tm_hour, pt->tm_min, pt->tm_sec);
 
@@ -27,7 +30,7 @@ extern int filenum;
 void GetVideoFile(void)
 {
     DIR* fdir;
-    fdir = opendir("/home/linux/Music");
+    fdir = opendir(MEDIA_DIR);
     if (NULL == fdir)
     {
         perror("fail to open");
@@ -64,10 +67,18 @@ int GetChoose(void) // 接收选项
 
 void Start_Pause(void) // 开始、暂停
 {
+    // 新增：自动创建管道，已存在则不报错（需引入2个头文件，见下文）
+    if (mkfifo(FIFO_FILE, 0666) < 0) {
+        if (errno != EEXIST) {
+            perror("fail to mkfifo");
+            return;
+        }
+    }
     if (stat_get == STAT_FREE) //==========开始=========
     {
         char tmpbuf[1024] = { 0 };
-        sprintf(tmpbuf, "/home/linux/Music/%s", filename[FileStat]);
+        //sprintf(tmpbuf, "/home/linux/Music/%s", filename[FileStat]);
+        sprintf(tmpbuf, "%s/%s", MEDIA_DIR, filename[FileStat]);
         stat_get = STAT_ON;
         pid_t pid = fork();
         if (pid > 0)
@@ -79,8 +90,17 @@ void Start_Pause(void) // 开始、暂停
 
             close(1);
             close(2);
-            execlp("mplayer", "mplayer", "-slave", "-input", "file=./fifo_mp3", tmpbuf, NULL);
+            //execlp("mplayer", "mplayer", "-slave", "-input", "file=./fifo_mp3", tmpbuf, NULL);
+            // 关键修改：把 "file=./fifo_mp3" 改为 "file="FIFO_FILE
+            //execlp("mplayer", "mplayer", "-slave", "-input", "file="FIFO_FILE, tmpbuf, NULL);
+            // 纯命令行模式：-nogui(无窗口) -ao pulse(WSL2音频输出) -quiet(减少日志)
+            //execlp("mplayer", "mplayer", "-slave", "-input", "file="FIFO_FILE, "-nogui", "-ao", "pulse", "-quiet", tmpbuf, NULL);
+            // 核心修改：-ao alsa（ALSA音频输出），去掉-ao pulse，保留-nogui(无窗口)-quiet(静默)
+            //execlp("mplayer", "mplayer", "-slave", "-input", "file="FIFO_FILE, "-nogui", "-ao", "alsa", "-quiet", tmpbuf, NULL);
+            // WSL2纯命令行出声音核心：-ao pulse指定音频驱动 + 显式指向WSLg的Pulse服务器
+            execlp("mplayer", "mplayer", "-slave", "-input", "file="FIFO_FILE, "-nogui", "-ao", "pulse:server=/mnt/wslg/PulseServer", "-quiet", tmpbuf, NULL);
             perror("fail to mplayer");
+            exit(0);
         }
         else
         {
@@ -90,7 +110,7 @@ void Start_Pause(void) // 开始、暂停
     }
     else //=============暂停pause============
     {
-        int fd = open("./fifo_mp3", O_WRONLY);
+        int fd = open(FIFO_FILE, O_WRONLY);
         if (-1 == fd)
         {
             perror("fail to open");
@@ -111,7 +131,7 @@ void Start_Pause(void) // 开始、暂停
 }
 void StopOff(void) // 停止
 {
-    int fd = open("./fifo_mp3", O_WRONLY | O_NONBLOCK);
+    int fd = open(FIFO_FILE, O_WRONLY | O_NONBLOCK);
     if (-1 == fd)
     {
         perror("fail to open");
@@ -186,7 +206,7 @@ void SpeedOn(void) // 倍速播放
         DayBook("input: last >>> 返回主菜单");
         return;
     }
-    int fd = open("./fifo_mp3", O_WRONLY | O_NONBLOCK); // 管道会阻塞
+    int fd = open(FIFO_FILE, O_WRONLY | O_NONBLOCK); // 管道会阻塞
     if (-1 == fd)
     {
         perror("fail to open");
@@ -236,7 +256,7 @@ void Location(void) // 定位
         return;
     }
 
-    int fd = open("./fifo_mp3", O_WRONLY | O_NONBLOCK); // 管道会阻塞
+    int fd = open(FIFO_FILE, O_WRONLY | O_NONBLOCK); // 管道会阻塞
     if (-1 == fd)
     {
         perror("fail to open");
@@ -270,7 +290,7 @@ void VideoMode(void) // 播放方式
         DayBook("input: last >>> 返回主菜单");
         return;
     }
-    int fd = open("./fifo_mp3", O_WRONLY | O_NONBLOCK); // 管道会阻塞
+    int fd = open(FIFO_FILE, O_WRONLY | O_NONBLOCK); // 管道会阻塞
     if (-1 == fd)
     {
         perror("fail to open");
