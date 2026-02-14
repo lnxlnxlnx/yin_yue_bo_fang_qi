@@ -92,13 +92,13 @@ void Start_Pause(void) // 开始、暂停
             close(2);
             //execlp("mplayer", "mplayer", "-slave", "-input", "file=./fifo_mp3", tmpbuf, NULL);
             // 关键修改：把 "file=./fifo_mp3" 改为 "file="FIFO_FILE
-            //execlp("mplayer", "mplayer", "-slave", "-input", "file="FIFO_FILE, tmpbuf, NULL);
+            execlp("mplayer", "mplayer", "-slave", "-input", "file="FIFO_FILE, tmpbuf, NULL);
             // 纯命令行模式：-nogui(无窗口) -ao pulse(WSL2音频输出) -quiet(减少日志)
             //execlp("mplayer", "mplayer", "-slave", "-input", "file="FIFO_FILE, "-nogui", "-ao", "pulse", "-quiet", tmpbuf, NULL);
             // 核心修改：-ao alsa（ALSA音频输出），去掉-ao pulse，保留-nogui(无窗口)-quiet(静默)
             //execlp("mplayer", "mplayer", "-slave", "-input", "file="FIFO_FILE, "-nogui", "-ao", "alsa", "-quiet", tmpbuf, NULL);
             // WSL2纯命令行出声音核心：-ao pulse指定音频驱动 + 显式指向WSLg的Pulse服务器
-            execlp("mplayer", "mplayer", "-slave", "-input", "file="FIFO_FILE, "-nogui", "-ao", "pulse:server=/mnt/wslg/PulseServer", "-quiet", tmpbuf, NULL);
+            //execlp("mplayer", "mplayer", "-slave", "-input", "file="FIFO_FILE, "-nogui", "-ao", "pulse:server=/mnt/wslg/PulseServer", "-quiet", tmpbuf, NULL);
             perror("fail to mplayer");
             exit(0);
         }
